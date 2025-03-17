@@ -71,6 +71,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('chatbot')->group(function () {
             Route::get('users/{userId}/conversations', [ChatbotConversationController::class, 'getUserConversations']);
             Route::get('courses/{courseId}/conversations', [ChatbotConversationController::class, 'getCourseConversations']);
+            Route::get('conversation-thread', [ChatbotConversationController::class, 'getConversationThread']);
         });
 
         // Learning Progress
