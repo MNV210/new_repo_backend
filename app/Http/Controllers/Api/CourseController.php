@@ -7,6 +7,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Models\UserRegisterCourse;
 
 class CourseController extends Controller
 {
@@ -196,6 +197,32 @@ class CourseController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully unenrolled from course'
+        ]);
+    }
+
+    public function getCourseUserRegister(Request $requets)
+    {
+        $user = $requets->user();
+        $courseRegister = UserRegisterCourse::where('user_id', $user->id)->with('course')->get();
+        $courseIds = UserRegisterCourse::where('user_id', $user->id)
+                        ->pluck('course_id');
+        $courses = Course::whereIn('id', $courseIds)->with('lessons')->with('learnProgress')->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'courseUserRegister'=>$courseRegister,
+                'course'=>$courses
+            ]
+        ]);
+    }
+
+    public function checkUserRegisterCourse(Request $request) {
+        $user = $request->user();
+
+        $checkRegister  = UserRegisterCourse::where('user_id',$user->id)->where('course_id',$request->course_id)->first();
+
+        return response()->json([
+            'data' => $checkRegister,
         ]);
     }
 } 

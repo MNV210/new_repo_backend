@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ChatbotConversationController;
 use App\Http\Controllers\Api\LearnProgressController;
+use App\Http\Controllers\Api\UserRegisterCourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,8 @@ Route::prefix('v1')->group(function () {
             Route::get('{id}/enrolled-students', [CourseController::class, 'enrolledStudents']);
             Route::post('{id}/enroll', [CourseController::class, 'enroll']);
             Route::post('{id}/unenroll', [CourseController::class, 'unenroll']);
+            Route::post('user_register', [CourseController::class, 'getCourseUserRegister']);
+            Route::post('check_register',[CourseController::class,'checkUserRegisterCourse']);
         });
 
         // Lesson Management
@@ -61,6 +64,7 @@ Route::prefix('v1')->group(function () {
             Route::post('{id}/submit', [QuizController::class, 'submitQuiz']);
             Route::get('{id}/results', [QuizController::class, 'getResults']);
         });
+        Route::post('quizz/user_results', [QuizController::class, 'getResultsWithUser']);
 
         // Question Management
         Route::apiResource('questions', QuestionController::class);
@@ -71,7 +75,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('chatbot')->group(function () {
             Route::get('users/{userId}/conversations', [ChatbotConversationController::class, 'getUserConversations']);
             Route::get('courses/{courseId}/conversations', [ChatbotConversationController::class, 'getCourseConversations']);
-            Route::get('conversation-thread', [ChatbotConversationController::class, 'getConversationThread']);
+            Route::post('conversation-thread', [ChatbotConversationController::class, 'getConversationThread']);
         });
 
         // Learning Progress
@@ -80,7 +84,10 @@ Route::prefix('v1')->group(function () {
             Route::get('users/{userId}', [LearnProgressController::class, 'getUserProgress']);
             Route::get('courses/{courseId}', [LearnProgressController::class, 'getCourseProgress']);
             Route::get('lessons/{lessonId}', [LearnProgressController::class, 'getLessonProgress']);
+            Route::post('user_progress',[LearnProgressController::class,'getLessonProgressUser']);
         });
+
+        Route::apiResource('/user_register_course',UserRegisterCourseController::class);
     });
 });
 

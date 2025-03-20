@@ -21,10 +21,7 @@ class LearnProgressController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'course_id' => 'required|exists:courses,id',
-            'lesson_id' => 'required|exists:lessons,id',
-            'progress' => 'required|integer|min:0|max:100'
+            'lesson_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -33,14 +30,16 @@ class LearnProgressController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+        $user = $request->user();
+
 
         $progress = LearnProgress::updateOrCreate(
             [
-                'user_id' => $request->user_id,
-                'course_id' => $request->course_id,
-                'lesson_id' => $request->lesson_id
+                'user_id' => $user->id,
+                'lesson_id' => $request->lesson_id,
+                'course_id' => $request->course_id
             ],
-            ['progress' => $request->progress]
+            ['progress' => 'completed']
         );
 
         return response()->json([
@@ -148,6 +147,15 @@ class LearnProgressController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $progress
+        ]);
+    }
+
+    public function getLessonProgressUser(Request $request) {
+        $user = $request->user();
+        $response = LearnProgress::where('user_id',$user->id)->where('course_id',$request->course_id)->get();
+
+        return response()->json([
+            'data' => $response
         ]);
     }
 } 

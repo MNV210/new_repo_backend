@@ -191,10 +191,11 @@ class ChatbotConversationController extends Controller
     public function getConversationThread(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
             'course_id' => 'nullable|exists:courses,id',
             'lesson_id' => 'nullable|exists:lessons,id'
         ]);
+
+        $user = $request->user();
 
         if ($validator->fails()) {
             return response()->json([
@@ -203,7 +204,7 @@ class ChatbotConversationController extends Controller
             ], 422);
         }
 
-        $query = ChatbotConversation::where('user_id', $request->user_id);
+        $query = ChatbotConversation::where('user_id', $user->id);
         
         if ($request->has('course_id')) {
             $query->where('course_id', $request->course_id);

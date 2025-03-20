@@ -112,9 +112,9 @@ class QuizController extends Controller
         ]);
     }
 
-    public function submitQuiz(Request $request, $id)
+    public function submitQuiz(Request $request)
     {
-        $quiz = Quiz::with('questions')->find($id);
+        $quiz = Quiz::with('questions')->find($request->quiz_id);
         
         if (!$quiz) {
             return response()->json([
@@ -124,9 +124,10 @@ class QuizController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'answers' => 'required|array',
-            'time_spent' => 'required|integer'
+            'user_id' => 'required',
+            'quiz_id' => 'required',
+            // 'answers' => 'required|array',
+            // 'time_spent' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -155,7 +156,7 @@ class QuizController extends Controller
         $result = QuizResult::create([
             'user_id' => $request->user_id,
             'quiz_id' => $quiz->id,
-            'score' => $score,
+            // 'score' => $score,
             'total_questions' => $totalQuestions,
             'correct_answers' => $correctAnswers,
             'time_spent' => $request->time_spent,
@@ -181,6 +182,19 @@ class QuizController extends Controller
         }
 
         $results = $quiz->results()->with('user')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $results
+        ]);
+    }
+
+    //tu viet
+    public function getResultsWithUser(Request $request)
+    {
+
+        $user = $request->user();
+        $results = QuizResult::where('user_id',$user->id)->with('user', 'quiz')->get();
 
         return response()->json([
             'status' => 'success',
