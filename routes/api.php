@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ChatbotConversationController;
 use App\Http\Controllers\Api\LearnProgressController;
 use App\Http\Controllers\Api\UserRegisterCourseController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,7 @@ Route::prefix('v1')->group(function () {
             Route::post('user_progress',[LearnProgressController::class,'getLessonProgressUser']);
         });
 
+        Routes::apiResource('/category',CategoryController::class);
         Route::apiResource('/user_register_course',UserRegisterCourseController::class);
     });
 });

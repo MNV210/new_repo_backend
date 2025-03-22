@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -24,9 +25,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|in:admin,instructor,student',
-            'avatar' => 'nullable|string'
+            'password' => 'required|string|min:6',
+            'role' => 'required',
+            'avatar' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -36,12 +37,29 @@ class UserController extends Controller
             ], 422);
         }
 
+        $avatarUrl = $request->avatar;
+
+        if ($request->has('avatar')) {
+            $response = Http::post('http://localhost:8001/upload', [
+                'file' => $request->avatar
+            ]);
+
+            if ($response->successful()) {
+                $avatarUrl = $response->json('url');
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to upload avatar'
+                ], 500);
+            }
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'avatar' => $request->avatar
+            // 'avatar' => $avatarUrl
         ]);
 
         return response()->json([
@@ -82,7 +100,6 @@ class UserController extends Controller
             'name' => 'string|max:255',
             'email' => 'string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8',
-            'role' => 'in:admin,instructor,student',
             'avatar' => 'nullable|string'
         ]);
 
@@ -166,4 +183,4 @@ class UserController extends Controller
             'data' => $user->teacherCourses
         ]);
     }
-} 
+}
