@@ -17,7 +17,8 @@ class Course extends Model
         'thumbnail',
         'file_url',
         'slug',
-        'level'
+        'level',
+        'category_id'
     ];
 
     // Relationships

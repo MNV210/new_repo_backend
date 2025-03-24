@@ -183,4 +183,13 @@ class UserController extends Controller
             'data' => $user->teacherCourses
         ]);
     }
+
+    public function getUserNotStudent()
+    {
+        $users = User::where('role', '!=', 'student')->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $users
+        ]);
+    }
 }

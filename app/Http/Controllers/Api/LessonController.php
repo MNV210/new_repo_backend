@@ -171,4 +171,13 @@ class LessonController extends Controller
             'data' => $progress
         ]);
     }
+
+    public function getLessonByCourse($course_id)
+    {
+        $lessons = Lesson::where('course_id', $course_id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $lessons
+        ]);
+    }
 } 

@@ -45,7 +45,8 @@ class CourseController extends Controller
             'thumbnail' => $request->thumbnail,
             'file_url' => $request->file_url,
             'slug' => Str::slug($request->title),
-            'level' => $request->level
+            'level' => $request->level,
+            'category_id' => $request->category_id
         ]);
 
         return response()->json([
@@ -173,33 +174,6 @@ class CourseController extends Controller
         ]);
     }
 
-    public function unenroll(Request $request, $id)
-    {
-        $course = Course::find($id);
-        $user_id = $request->user_id;
-
-        if (!$course) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Course not found'
-            ], 404);
-        }
-
-        if (!$course->students()->where('user_id', $user_id)->exists()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User not enrolled in this course'
-            ], 422);
-        }
-
-        $course->students()->detach($user_id);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully unenrolled from course'
-        ]);
-    }
-
     public function getCourseUserRegister(Request $requets)
     {
         $user = $requets->user();
@@ -225,4 +199,19 @@ class CourseController extends Controller
             'data' => $checkRegister,
         ]);
     }
-} 
+
+    public function getCourseUserCreate(Request $request) {
+        $user = $request->user();
+
+        if ($user->role === 'admin') {
+            $courses = Course::with('lessons')->get();
+        } else {
+            $courses = Course::where('teacher_id', $user->id)->with('lessons')->get();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $courses
+        ]);
+    }
+}

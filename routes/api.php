@@ -50,6 +50,7 @@ Route::prefix('v1')->group(function () {
             Route::post('{id}/unenroll', [CourseController::class, 'unenroll']);
             Route::post('user_register', [CourseController::class, 'getCourseUserRegister']);
             Route::post('check_register',[CourseController::class,'checkUserRegisterCourse']);
+            Route::post('user_create',[CourseController::class,'getCourseUserCreate']);
         });
 
         // Lesson Management
@@ -57,6 +58,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('lessons')->group(function () {
             Route::get('{id}/progress', [LessonController::class, 'getProgress']);
             Route::post('{id}/progress', [LessonController::class, 'updateProgress']);
+            Route::get('course/{courseId}', [LessonController::class, 'getLessonByCourse']);
         });
 
         // Quiz Management
@@ -88,8 +90,10 @@ Route::prefix('v1')->group(function () {
             Route::post('user_progress',[LearnProgressController::class,'getLessonProgressUser']);
         });
 
-        Routes::apiResource('/category',CategoryController::class);
+        Route::apiResource('/categories',CategoryController::class);
         Route::apiResource('/user_register_course',UserRegisterCourseController::class);
+        Route::get('/not_student', [UserController::class, 'getUserNotStudent']);
+
     });
 });
 
