@@ -10,9 +10,14 @@ use Illuminate\Support\Facades\Validator;
 
 class QuizController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $quizzes = Quiz::with(['course', 'questions'])->get();
+        $quizzes = Quiz::query();
+        if($request->has('course_id')){
+            $quizzes->where('course_id', $request->course_id)->with('course')->with('questions');
+        }
+        $quizzes = $quizzes->get();
+        // $quizzes = Quiz::with(['course', 'questions'])->get();
         return response()->json([
             'status' => 'success',
             'data' => $quizzes

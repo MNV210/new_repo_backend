@@ -21,11 +21,10 @@ class LessonController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id',
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'file_url' => 'nullable|string',
-            'type' => 'required|string'
+            'course_id' => 'required',
+            'title' => 'required',
+            'content' => 'required',
+            'file_url' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -72,10 +71,9 @@ class LessonController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'course_id' => 'exists:courses,id',
             'title' => 'string|max:255',
             'content' => 'string',
-            'file_url' => 'nullable|string',
+            'file_url' => 'nullable',
             'type' => 'string'
         ]);
 
