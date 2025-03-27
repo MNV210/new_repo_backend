@@ -122,11 +122,15 @@ class CourseController extends Controller
             ], 404);
         }
 
+        // Delete related user registrations
+        UserRegisterCourse::where('course_id', $id)->delete();
+
+        // Delete the course
         $course->delete();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Course deleted successfully'
+            'message' => 'Course and related data deleted successfully'
         ]);
     }
 

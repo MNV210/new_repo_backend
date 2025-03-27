@@ -103,11 +103,15 @@ class LessonController extends Controller
             ], 404);
         }
 
+        // Delete related learn progress
+        LearnProgress::where('lesson_id', $id)->delete();
+
+        // Delete the lesson
         $lesson->delete();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Lesson deleted successfully'
+            'message' => 'Lesson and related learn progress deleted successfully'
         ]);
     }
 
@@ -178,4 +182,4 @@ class LessonController extends Controller
             'data' => $lessons
         ]);
     }
-} 
+}
