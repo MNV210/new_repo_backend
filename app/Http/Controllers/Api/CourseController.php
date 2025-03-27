@@ -13,7 +13,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::with(['teacher', 'lessons'])->get();
+        $courses = Course::with(['teacher', 'lessons','category'])->get();
         return response()->json([
             'status' => 'success',
             'data' => $courses

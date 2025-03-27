@@ -27,6 +27,11 @@ class Course extends Model
         return $this->belongsTo(User::class, 'teacher_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function students()
     {
         return $this->belongsToMany(UserRegisterCourse::class, 'user_register_course')
@@ -47,4 +52,6 @@ class Course extends Model
     {
         return $this->hasMany(LearnProgress::class);
     }
+
+
 } 
