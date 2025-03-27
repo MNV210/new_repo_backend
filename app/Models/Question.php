@@ -11,11 +11,11 @@ class Question extends Model
 
     protected $fillable = [
         'quiz_id',
-        'question_text',
-        'question1',
-        'question2',
-        'question3',
-        'question4',
+        'question',
+        'option1',
+        'option2',
+        'option3',
+        'option4',
         'correct_answer'
     ];
 

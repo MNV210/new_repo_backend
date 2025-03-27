@@ -9,25 +9,29 @@ use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $questions = Question::with('quiz')->get();
+        $question = Question::query();
+        if($request->has('quiz_id')){
+            $question->where('quiz_id', $request->quiz_id)->with('quiz');
+        }
+        $questions = $question->get();
         return response()->json([
             'status' => 'success',
             'data' => $questions
         ]);
     }
-
+   
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'quiz_id' => 'required|exists:quizzes,id',
-            'question_text' => 'required|string',
-            'question1' => 'required|string',
-            'question2' => 'required|string',
-            'question3' => 'required|string',
-            'question4' => 'required|string',
-            'correct_answer' => 'required|integer|min:1|max:4'
+            'question' => 'required|string',
+            'option1' => 'required|string',
+            'option2' => 'required|string',
+            'option3' => 'required|string',
+            'option4' => 'required|string',
+            'correct_answer' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -75,12 +79,11 @@ class QuestionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'quiz_id' => 'exists:quizzes,id',
-            'question_text' => 'string',
-            'question1' => 'string',
-            'question2' => 'string',
-            'question3' => 'string',
-            'question4' => 'string',
-            'correct_answer' => 'integer|min:1|max:4'
+            'question' => 'string',
+            'option1' => 'string',
+            'option2' => 'string',
+            'option3' => 'string',
+            'option4' => 'string',
         ]);
 
         if ($validator->fails()) {
