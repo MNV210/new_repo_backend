@@ -192,4 +192,22 @@ class UserController extends Controller
             'data' => $users
         ]);
     }
+
+    public function getInfomationUser(Request $request)
+    {
+        $id = $request->user()->id;
+        $user = User::with(['teacherCourses', 'enrolledCourses', 'quizResults'])->find($id);
+        
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $user
+        ]);
+    }
 }
