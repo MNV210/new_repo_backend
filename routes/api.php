@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ChatbotConversationController;
 use App\Http\Controllers\Api\LearnProgressController;
 use App\Http\Controllers\Api\UserRegisterCourseController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\QuizResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,9 @@ Route::prefix('v1')->group(function () {
             Route::post('check_register',[CourseController::class,'checkUserRegisterCourse']);
             Route::post('user_create',[CourseController::class,'getCourseUserCreate']);
         });
+
+        //Quỉzet Result Management
+        Route::apiResource('quiz-results', QuizResultController::class);
 
         // Lesson Management
         Route::apiResource('lessons', LessonController::class);

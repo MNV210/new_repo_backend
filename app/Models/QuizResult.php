@@ -13,7 +13,7 @@ class QuizResult extends Model
         'user_id',
         'quiz_id',
         'total_questions',
-        'correct_answers',
+        'score',
         'passed',
         'answers_detail'
     ];
