@@ -33,11 +33,9 @@ class ChatbotConversationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'type' => 'required|string|in:user,bot',
+            'type' => 'required|string',
             'message' => 'required|string',
             'course_id' => 'nullable|exists:courses,id',
-            'lesson_id' => 'nullable|exists:lessons,id'
         ]);
 
         if ($validator->fails()) {
@@ -46,6 +44,8 @@ class ChatbotConversationController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+        $user = $request->user();
+        $request->merge(['user_id' => $user->id]);
 
         $conversation = ChatbotConversation::create($request->all());
 
@@ -98,10 +98,9 @@ class ChatbotConversationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'exists:users,id',
-            'type' => 'string|in:user,bot',
+            'type' => 'string',
             'message' => 'string',
             'course_id' => 'nullable|exists:courses,id',
-            'lesson_id' => 'nullable|exists:lessons,id'
         ]);
 
         if ($validator->fails()) {
@@ -192,7 +191,6 @@ class ChatbotConversationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'course_id' => 'nullable|exists:courses,id',
-            'lesson_id' => 'nullable|exists:lessons,id'
         ]);
 
         $user = $request->user();
@@ -208,10 +206,6 @@ class ChatbotConversationController extends Controller
         
         if ($request->has('course_id')) {
             $query->where('course_id', $request->course_id);
-        }
-        
-        if ($request->has('lesson_id')) {
-            $query->where('lesson_id', $request->lesson_id);
         }
         
         $conversations = $query->orderBy('created_at', 'asc')->get();

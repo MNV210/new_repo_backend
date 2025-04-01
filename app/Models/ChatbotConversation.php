@@ -14,7 +14,6 @@ class ChatbotConversation extends Model
         'type',
         'message',
         'course_id',
-        'lesson_id'
     ];
 
     // Relationships
