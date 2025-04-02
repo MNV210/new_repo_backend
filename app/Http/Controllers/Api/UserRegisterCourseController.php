@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\UserRegisterCourse; // Assuming this model exists
+use App\Models\ActionHistory; // Ensure this model is imported
 
 class UserRegisterCourseController extends Controller
 {
@@ -36,6 +37,13 @@ class UserRegisterCourseController extends Controller
         $validatedData['user_id'] = $user->id;
 
         $course = UserRegisterCourse::create($validatedData);
+
+        ActionHistory::create([
+            'user_id' => $user->id,
+            'course_id' => $request->course_id,
+            'action_details' => "Đăng ký khóa học"
+        ]);
+
         return response()->json($course, 201);
     }
 

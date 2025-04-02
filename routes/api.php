@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\LearnProgressController;
 use App\Http\Controllers\Api\UserRegisterCourseController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\QuizResultController;
+use App\Http\Controllers\Api\AnalysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,13 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/categories',CategoryController::class);
         Route::apiResource('/user_register_course',UserRegisterCourseController::class);
         Route::get('/not_student', [UserController::class, 'getUserNotStudent']);
+
+        //Thống kê
+        Route::get('/analys', [AnalysController::class, 'analys']);
+        Route::get('/action-history', [AnalysController::class, 'getActionHistory']);
+        Route::get('/register_course_in_month', [AnalysController::class, 'registeredCoursesByMonth']);
+        Route::get('/user_in_6_month', [AnalysController::class, 'usersCreatedLastSixMonths']);
+
 
     });
 });

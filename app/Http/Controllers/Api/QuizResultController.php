@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\QuizResult;
+use App\Models\Quiz;
+use App\Models\ActionHistory;
+use App\Models\User;
 
 class QuizResultController extends Controller
 {
@@ -37,11 +40,14 @@ class QuizResultController extends Controller
         $validatedData['total_questions'] = $request->input('total_questions', 0);
         // $validatedData['passed'] = $request->input('passed', false);
         $validatedData['answers_detail'] = $request->input('answers', []);        
-        // Create the quiz result
-        // You can also add additional logic here to calculate the score, etc.
-        // For example, if you want to check if the score is above a certain threshold
+
+        $quiz = Quiz::find($validatedData['quiz_id']);
 
         $quizResult = QuizResult::create($validatedData);
+        ActionHistory::create([
+            'user_id' => $request->user()->id,
+            'action_details' => "Vừa hoàn thành bài kiểm tra ".$quiz->title." với kết quả: " . $validatedData['score']."/".$validatedData['total_questions'],
+        ]);
         return response()->json($quizResult, 201);
     }
 

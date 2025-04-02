@@ -134,22 +134,6 @@ class CourseController extends Controller
         ]);
     }
 
-    public function enrolledStudents($id)
-    {
-        $course = Course::find($id);
-
-        if (!$course) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Course not found'
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $course->students
-        ]);
-    }
 
     public function enroll(Request $request, $id)
     {
