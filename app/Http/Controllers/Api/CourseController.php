@@ -192,9 +192,9 @@ class CourseController extends Controller
         $user = $request->user();
 
         if ($user->role === 'admin') {
-            $courses = Course::with('lessons')->get();
+            $courses = Course::with('lessons')->with('teacher')->get();
         } else {
-            $courses = Course::where('teacher_id', $user->id)->with('lessons')->get();
+            $courses = Course::where('teacher_id', $user->id)->with('lessons')->with('teacher')->get();
         }
 
         return response()->json([
