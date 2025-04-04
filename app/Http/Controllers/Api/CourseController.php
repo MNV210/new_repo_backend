@@ -125,6 +125,18 @@ class CourseController extends Controller
         // Delete related user registrations
         UserRegisterCourse::where('course_id', $id)->delete();
 
+        //delete all lessons of this course
+        $course->lessons()->delete();
+        // Delete related quizzes and their questions
+        $course->quizzes()->each(function ($quiz) {
+            $quiz->questions()->delete();
+            $quiz->results()->delete(); // Delete related quiz results
+            $quiz->delete();
+        });
+
+        // Delete related learn progress
+        $course->learnProgress()->delete();
+
         // Delete the course
         $course->delete();
 
