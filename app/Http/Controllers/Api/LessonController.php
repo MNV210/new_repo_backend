@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LearnProgress;
+use App\Models\UserRegisterCourse;
 
 class LessonController extends Controller
 {
