@@ -40,7 +40,7 @@ class UserController extends Controller
         $avatarUrl = $request->avatar;
 
         if ($request->has('avatar')) {
-            $response = Http::post('http://localhost:8001/upload', [
+            $response = Http::post('http://localhost:8000/upload', [
                 'file' => $request->avatar
             ]);
 
