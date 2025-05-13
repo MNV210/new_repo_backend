@@ -46,6 +46,8 @@ class ChatbotConversationController extends Controller
         }
         $user = $request->user();
         $request->merge(['user_id' => $user->id]);
+        \Log::info($request->message);
+
 
         $conversation = ChatbotConversation::create($request->all());
 

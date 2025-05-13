@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserRegisterCourseController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\QuizResultController;
 use App\Http\Controllers\Api\AnalysController;
+use App\Http\Controllers\ImportExcelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +107,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/register_course_in_month', [AnalysController::class, 'registeredCoursesByMonth']);
         Route::get('/user_in_6_month', [AnalysController::class, 'usersCreatedLastSixMonths']);
 
-
+        Route::post('import_excel',[ImportExcelController::class,'import']);
     });
 });
 
